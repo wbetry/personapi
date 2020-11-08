@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,14 @@ class PersonController {
     private final PersonMapper personMapper;
 
     @GetMapping
-    public List<PersonDTO> getAll() {
-        return personService.getAll().stream().map(personMapper::toDto).collect(Collectors.toList());
+    public ResponseEntity<List<PersonDTO>> getAll() {
+        List<PersonDTO> dto = personService.getAll().stream().map(personMapper::toDto).collect(Collectors.toList());
+
+        if (dto.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/{id}")
