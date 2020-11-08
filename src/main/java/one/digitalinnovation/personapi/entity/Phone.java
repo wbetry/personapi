@@ -30,7 +30,7 @@ public class Phone {
     private Long id;
     private UUID genId;
     @Column(nullable = false)
-    @Enumerated(value = EnumType.ORDINAL)
+    @Enumerated(value = EnumType.STRING)
     private PhoneType type;
     @Column(nullable = false)
     private String number;

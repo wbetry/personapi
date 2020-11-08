@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import one.digitalinnovation.personapi.dto.PersonDTO;
+import one.digitalinnovation.personapi.dto.mapper.PersonMapper;
 import one.digitalinnovation.personapi.entity.Person;
 import one.digitalinnovation.personapi.service.PersonService;
 
@@ -19,16 +20,18 @@ import one.digitalinnovation.personapi.service.PersonService;
 @RequestMapping("/api/v1/people")
 @RequiredArgsConstructor
 class PersonController {
-    
+
     private final PersonService personService;
 
+    private final PersonMapper personMapper;
+
     @PostMapping
-    public ResponseEntity<Person> createPerson(@RequestBody @Valid PersonDTO dto) {
-        Person person = dto.toPerson();
+    public ResponseEntity<PersonDTO> createPerson(@RequestBody @Valid PersonDTO dto) {
+        Person person = personMapper.toModel(dto);
 
         personService.createPerson(person);
 
-        return ResponseEntity.created(URI.create("/api/v1/people/" + person.getId())).body(person);
+        return ResponseEntity.created(URI.create("/api/v1/people/" + person.getId())).body(personMapper.toDto(person));
     }
 
 }

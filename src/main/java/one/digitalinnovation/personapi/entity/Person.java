@@ -1,6 +1,5 @@
 package one.digitalinnovation.personapi.entity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +41,7 @@ public class Person {
     @Column(nullable = false)
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "person_id")
-    private final List<Phone> phones = new ArrayList<>();
+    private List<Phone> phones;
 
     @PrePersist
     void prePersist() {
