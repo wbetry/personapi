@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +55,15 @@ class PersonController {
         personService.createPerson(person);
 
         return ResponseEntity.created(URI.create("/api/v1/people/" + person.getId())).body(personMapper.toDto(person));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PersonDTO>  updatePerson(@PathVariable Long id, @RequestBody @Valid PersonDTO dto) {
+        Person dataToUpdate = personMapper.toModel(dto);
+
+        Person updatedPerson = personService.updatePerson(id, dataToUpdate);
+
+        return ResponseEntity.ok(personMapper.toDto(updatedPerson));
     }
 
     @DeleteMapping("/{id}")
