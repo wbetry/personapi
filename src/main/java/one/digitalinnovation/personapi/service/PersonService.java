@@ -1,6 +1,7 @@
 package one.digitalinnovation.personapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,10 @@ public class PersonService {
 
 	public List<Person> getAll() {
 		return personRepository.findAll();
+	}
+
+	public Optional<Person> getOne(Long id) {
+		return personRepository.findById(id);
 	}
 
 }

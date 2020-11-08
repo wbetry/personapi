@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,11 @@ class PersonController {
     @GetMapping
     public List<PersonDTO> getAll() {
         return personService.getAll().stream().map(personMapper::toDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PersonDTO> getOne(@PathVariable Long id) {
+        return ResponseEntity.of(personService.getOne(id).map(personMapper::toDto));
     }
 
     @PostMapping
