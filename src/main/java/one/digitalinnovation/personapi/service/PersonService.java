@@ -1,5 +1,7 @@
 package one.digitalinnovation.personapi.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -15,5 +17,9 @@ public class PersonService {
     public Person createPerson(Person person) {
         return personRepository.save(person);
     }
+
+	public List<Person> getAll() {
+		return personRepository.findAll();
+	}
 
 }

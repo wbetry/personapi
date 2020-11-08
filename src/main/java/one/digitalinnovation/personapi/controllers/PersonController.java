@@ -1,10 +1,13 @@
 package one.digitalinnovation.personapi.controllers;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,11 @@ class PersonController {
     private final PersonService personService;
 
     private final PersonMapper personMapper;
+
+    @GetMapping
+    public List<PersonDTO> getAll() {
+        return personService.getAll().stream().map(personMapper::toDto).collect(Collectors.toList());
+    }
 
     @PostMapping
     public ResponseEntity<PersonDTO> createPerson(@RequestBody @Valid PersonDTO dto) {
