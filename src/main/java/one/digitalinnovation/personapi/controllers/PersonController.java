@@ -1,7 +1,6 @@
 package one.digitalinnovation.personapi.controllers;
 
 import java.net.URI;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -14,30 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import one.digitalinnovation.personapi.dto.PersonDTO;
 import one.digitalinnovation.personapi.entity.Person;
-import one.digitalinnovation.personapi.repository.PersonRepository;
+import one.digitalinnovation.personapi.service.PersonService;
 
 @RestController
 @RequestMapping("/api/v1/people")
 @RequiredArgsConstructor
 class PersonController {
     
-    private final PersonRepository personRepository;
+    private final PersonService personService;
 
     @PostMapping
-    public ResponseEntity<Person> save(@RequestBody @Valid PersonDTO dto) {
-        Person person = Person.builder()
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .cpf(Long.parseLong(dto.getCpf()))
-                .build();
-        person.addPhones(dto.getPhones()
-                .stream()
-                .map(PersonDTO.PhoneDTO::toPhone)
-                .collect(Collectors.toList()));
+    public ResponseEntity<Person> createPerson(@RequestBody @Valid PersonDTO dto) {
+        Person person = dto.toPerson();
 
-        personRepository.save(person);
+        personService.createPerson(person);
 
-        return ResponseEntity.created(URI.create("//api/v1/people/" + person.getId())).body(person);
+        return ResponseEntity.created(URI.create("/api/v1/people/" + person.getId())).body(person);
     }
 
 }

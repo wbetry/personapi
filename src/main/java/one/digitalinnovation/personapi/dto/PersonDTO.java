@@ -1,6 +1,7 @@
 package one.digitalinnovation.personapi.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
 import lombok.Data;
+import one.digitalinnovation.personapi.entity.Person;
 import one.digitalinnovation.personapi.entity.Phone;
 import one.digitalinnovation.personapi.enums.PhoneType;
 
@@ -25,6 +27,22 @@ public class PersonDTO {
     @NotNull
     private List<@NotNull PhoneDTO> phones;
 
+    public Person toPerson() {
+        Person person = Person.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .cpf(Long.parseLong(cpf))
+                .build();
+
+        person.addPhones(phones.stream()
+                .map(PersonDTO.PhoneDTO::toPhone)
+                .collect(Collectors.toList())); 
+    
+        return person;
+    }
+
+
+
     @Data
     public static class PhoneDTO {
         private Long id;
@@ -40,5 +58,7 @@ public class PersonDTO {
                     .build();
         }
     }
+
+    
 
 }
